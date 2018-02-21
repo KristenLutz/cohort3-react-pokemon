@@ -1,21 +1,61 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import {PokeCard} from './features/poke-card.js';
+import {Header} from './components/header.js';
+import {Input} from './components/input.js';
+import {Button} from './components/button.js';
+import "./App.css";
+
+// use this to fetch data
+const fetchPokemon = idOrName =>
+  fetch(`http://pokeapi.co/api/v2/pokemon/${idOrName}`)
+    .then(response => response.json())
+    .then(pokemonData => ({
+      name: pokemonData.name,
+      picture: pokemonData.sprites.front_default
+    }));
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      pokemonData: {
+        name: '',
+        imgUrl:'',
+      },
+      searchTerm: '',
+    };
+  }
+
+  fetchPokemon = event => {
+    return fetch(`https://pokeapi.co/api/v2/pokemon/${'this.state.searchTerm'}`)
+      .then(response => response.json())
+      .then(pokemonData => {
+        this.setState({
+          name: pokemonData.name,
+          imgUrl: pokemonData.sprites.front_default,
+        });
+        return pokemonData;
+      })
+    };
+
+  saveSearchTerm = (event) => this.setState({ searchTerm: event.target.value});
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <Header>Gotta Fetch em All</Header>
+        <Input
+          onInputChange={this.saveSearchTerm}/>
+        <Button onClick = {this.fetchPokemon}>Search</Button>
+        <PokeCard
+          name = {this.state.name}
+          imgUrl = {this.state.imgUrl}>
+
+        </PokeCard>
       </div>
     );
   }
 }
 
 export default App;
+
