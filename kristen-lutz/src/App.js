@@ -18,11 +18,9 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      pokemonData: {
-        name: '',
-        imgUrl:'',
-      },
       searchTerm: '',
+      name: '',
+      imgUrl:'',
     };
   }
 
@@ -49,7 +47,7 @@ class App extends Component {
         <Button onClick = {this.fetchPokemon}>Search</Button>
         <PokeCard
           name = {this.state.name}
-          imgUrl = {this.state.imgUrl}>
+          imgUrl = {this.state.imgUrl} >
 
         </PokeCard>
       </div>
