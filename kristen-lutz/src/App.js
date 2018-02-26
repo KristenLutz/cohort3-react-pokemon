@@ -25,8 +25,14 @@ class App extends Component {
   }
 
   fetchPokemon = event => {
-    return fetch(`https://pokeapi.co/api/v2/pokemon/${'this.state.searchTerm'}`)
-      .then(response => response.json())
+    // debugger;
+    return fetch(`https://pokeapi.co/api/v2/pokemon/${this.state.searchTerm}`)
+      .then(response => {
+        if(!response){
+          throw Error(response.statusText);
+        }
+        return response.json()
+      })
       .then(pokemonData => {
         this.setState({
           name: pokemonData.name,
@@ -34,6 +40,9 @@ class App extends Component {
         });
         return pokemonData;
       })
+      .catch(function(error) {
+        console.log(error);
+      });
     };
 
   saveSearchTerm = (event) => this.setState({ searchTerm: event.target.value});
